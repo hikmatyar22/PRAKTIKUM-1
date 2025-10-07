@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuaca</title>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" 
+    integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <h3>Nama Tempat :</h3>  
+    <div class="topnav">
+        <input type="text" id="search" placeholder="Masukkan lokasi...">
+        <button onclick="getData()">Get</button>
+    </div>
+
+    <hr>
+    <h3>Suhu :</h3>
+    <div id="celcius"></div>
+    <div id="fahrenhit"></div>
+    <div id="kelembapan"></div>
+    <hr>
+
+    <h3>Lokasi :</h3>
+    <div id="negara"></div>
+    <div id="provinsi"></div>
+    <div id="kecamatan"></div>
+    <div id="longtitude"></div>
+    <div id="latitut"></div>
+
+    <script>
+        function getData() {
+            
+            const lokasi = document.getElementById("search").value.trim();
+
+            if (!lokasi) {
+                alert("Masukkan nama lokasi terlebih dahulu!");
+                return;
+            }
+
+            
+            const urlapi = `https://api.weatherapi.com/v1/current.json?key=9e07b5041dd642a9bb665535250710&q=${lokasi}&aqi=no`;
+
+           
+            $.ajax({
+                url: urlapi,
+                method: "GET",
+                success: function(data) {
+                    console.log(data);
+
+                   
+                    const c = document.getElementById("celcius");
+                    const f = document.getElementById("fahrenhit");
+                    const k = document.getElementById("kelembapan");
+                    const n = document.getElementById("negara");
+                    const p = document.getElementById("provinsi");
+                    const s = document.getElementById("kecamatan");
+                    const e = document.getElementById("longtitude");
+                    const o = document.getElementById("latitut");
+                    
+                   
+                    let celcius = data.current.temp_c;
+                    let fahrenhit = data.current.temp_f;
+                    let kelembapan = data.current.humidity;
+                    let negara = data.location.country;
+                    let provinsi = data.location.region;
+                    let kecamatan = data.location.name;
+                    let longtitude = data.location.lon;
+                    let latitut = data.location.lat;
+
+                   
+                    c.innerHTML = "Celcius: " + celcius + "°C";
+                    f.innerHTML = "Fahrenheit: " + fahrenhit + "°F";
+                    k.innerHTML = "Kelembapan: " + kelembapan + "%";
+                    n.innerHTML = "Negara: " + negara;
+                    p.innerHTML = "Provinsi: " + provinsi;
+                    s.innerHTML = "Kecamatan/Kota: " + kecamatan;
+                    e.innerHTML = "Longitude: " + longtitude;
+                    o.innerHTML = "Latitude: " + latitut;
+                },
+                error: function(error) {
+                    console.log(error);
+                    alert("Gagal mengambil data. Coba cek kembali nama lokasi.");
+                },
+            });
+        }
+    </script>
+</body>
+</html>
